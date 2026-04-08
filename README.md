@@ -86,6 +86,78 @@
 3. 提交配置并查看结果
 4. 查看详细的错误提示和正确答案
 
+## 服务器部署
+
+### Nginx 配置
+
+将以下配置添加到 Nginx 配置文件中（通常在 `/etc/nginx/sites-available/` 或 `/etc/nginx/conf.d/` 目录）：
+
+```nginx
+server {
+    listen 80;
+    server_name ns.cceli.icu;
+    
+    root /home/lyx/nginx/www/ns-cceli;
+    index index.html index.htm;
+    
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Access-Control-Allow-Origin *;
+    }
+    
+    location ~* \.(jpg|jpeg|png|gif|css|js|ico|svg)$ {
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000";
+    }
+    
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+}
+```
+
+### 部署步骤
+
+1. **构建项目**
+   ```bash
+   npm run build
+   ```
+
+2. **创建目标目录**
+   ```bash
+   sudo mkdir -p /home/lyx/nginx/www/ns-cceli
+   ```
+
+3. **复制构建文件**
+   ```bash
+   sudo cp -r dist/* /home/lyx/nginx/www/ns-cceli/
+   ```
+
+4. **设置权限**
+   ```bash
+   sudo chown -R lyx:lyx /home/lyx/nginx/www/ns-cceli/
+   sudo chmod -R 755 /home/lyx/nginx/www/ns-cceli/
+   ```
+
+5. **重载 Nginx**
+   ```bash
+   sudo systemctl reload nginx
+   ```
+
+6. **访问应用**
+   
+   打开浏览器访问 `http://ns.cceli.icu`
+
+### 自动化部署
+
+使用项目提供的部署脚本：
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request 来改进这个项目。

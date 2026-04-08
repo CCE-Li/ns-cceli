@@ -785,6 +785,10 @@ export default function RouterTerminalLab() {
     setCompletionIndex(0);
   }
 
+  function handleSubmit() {
+    executeCommand(line);
+  }
+
   function handleInputKeyDown(e) {
     if (e.key === "Enter") {
       e.preventDefault();

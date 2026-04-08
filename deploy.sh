@@ -9,6 +9,9 @@ echo "🚀 开始部署路由配置考试模拟器..."
 
 # 1. 构建项目
 echo "📦 构建项目..."
+# 设置环境变量禁用 GUI 相关组件
+export DISPLAY=:99
+export QT_QPA_PLATFORM=offscreen
 npm run build
 
 # 2. 创建目标目录（如果不存在）
